@@ -1,0 +1,4 @@
+.gameInfoList {
+  display: flex;
+  flex-wrap: wrap;
+}
