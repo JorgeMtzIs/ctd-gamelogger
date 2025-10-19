@@ -1,17 +1,13 @@
 import GameCard from './GameCard';
 import styles from './GameInfoList.module.css';
 
-function GameInfoList({ gameList }) {
-  return (
+function GameInfoList({ gameList, onUpdateGame }) {
+  return gameList.length === 0 ? (
+    <p>Press 'Add Game' above to get started</p>
+  ) : (
     <ul className={styles.gameInfoList}>
       {gameList.map((game) => (
-        <GameCard
-          key={game.id}
-          title={game.title}
-          year={game.year}
-          platform={game.platform}
-          completionState={game.completionState}
-        />
+        <GameCard key={game.id} game={game} onUpdateGame={onUpdateGame} />
       ))}
     </ul>
   );
