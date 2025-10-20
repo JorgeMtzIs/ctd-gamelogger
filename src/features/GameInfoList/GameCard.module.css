@@ -25,3 +25,9 @@
   bottom: 10px;
   left: 45%;
 }
+
+.favoriteButton {
+  position: absolute;
+  left: 5px;
+  top: 0px;
+}

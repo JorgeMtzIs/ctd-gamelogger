@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import LabeledInput from '../shared/LabeledInput';
 
-function GameForm({ onAddGame }) {
-  const Status = Object.freeze({
-    BACKLOGGED: 'Backlogged',
-    PROGRESS: 'In Progress',
-    COMPLETED: 'Completed',
-  });
+function GameForm({ children, onAddGame }) {
   const [isAdding, setIsAdding] = useState(false);
   const [gameData, setGameData] = useState({
     title: '',
@@ -68,9 +63,7 @@ function GameForm({ onAddGame }) {
             Status:
             <select name="completionStatus" onChange={(e) => handleChange(e)}>
               <option value="">--Please choose an option--</option>
-              <option value={Status.BACKLOGGED}>Backlogged</option>
-              <option value={Status.PROGRESS}>In Progress</option>
-              <option value={Status.COMPLETED}>Completed</option>
+              {children}
             </select>
           </label>
           <button

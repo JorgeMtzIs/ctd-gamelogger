@@ -2,11 +2,13 @@ import { useState } from 'react';
 import LabeledInput from '../../shared/LabeledInput';
 import styles from './GameCard.module.css';
 
-function GameCard({ game, onUpdateGame }) {
+function GameCard({ game, onUpdateGame, onFavoriteGame }) {
   const [isEditing, setIsEditing] = useState(false);
   const [workingTitle, setWorkingTitle] = useState(game.title);
   const [workingYear, setWorkingYear] = useState(game.year);
   const [workingPlatform, setWorkingPlatform] = useState(game.platform);
+  const nextState =
+    game.completionStatus === 'Backlogged' ? 'In Progress' : 'Completed';
 
   function handleTitleEdit(event) {
     setWorkingTitle(event.target.value);
@@ -37,6 +39,21 @@ function GameCard({ game, onUpdateGame }) {
       platform: workingPlatform,
     });
     setIsEditing(false);
+  }
+
+  function handleNextStatus(event) {
+    event.preventDefault();
+    onUpdateGame({ ...game, completionStatus: nextState });
+  }
+
+  function handlePreviousStatus(event) {
+    event.preventDefault();
+    onUpdateGame({ ...game, completionStatus: 'Backlogged' });
+  }
+
+  function handleFavorite(event) {
+    event.preventDefault();
+    onFavoriteGame(game.id);
   }
 
   return (
@@ -90,12 +107,29 @@ function GameCard({ game, onUpdateGame }) {
             <li>Platform: {game.platform}</li>
             <li>Status: {game.completionStatus}</li>
           </ul>
-          <button disabled={game.completionStatus === 'Backlogged'}>
+          <button
+            disabled={
+              game.completionStatus === 'Backlogged' ||
+              game.completionStatus === 'Completed'
+            }
+            onClick={(e) => handlePreviousStatus(e)}
+          >
             Backlog
           </button>
-          <button disabled={game.completionStatus === 'Completed'}>
+          <button
+            disabled={game.completionStatus === 'Completed'}
+            onClick={(e) => handleNextStatus(e)}
+          >
             {game.completionStatus === 'Backlogged' ? 'Play' : 'Complete'}
           </button>
+          {game.completionStatus === 'Completed' && (
+            <button
+              className={styles.favoriteButton}
+              onClick={(e) => handleFavorite(e)}
+            >
+              {game.favorite ? 'Unfavorite' : 'Favorite'}
+            </button>
+          )}
         </>
       )}
     </div>
