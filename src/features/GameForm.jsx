@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import LabeledInput from '../shared/LabeledInput';
+import styles from './GameForm.module.css';
 
 function GameForm({ children, onAddGame }) {
   const [isAdding, setIsAdding] = useState(false);
@@ -40,7 +41,7 @@ function GameForm({ children, onAddGame }) {
   return (
     <>
       {isAdding ? (
-        <form onSubmit={(e) => handleAddGame(e)}>
+        <form className={styles.gameForm} onSubmit={(e) => handleAddGame(e)}>
           <LabeledInput
             type="text"
             labelText="Title: "

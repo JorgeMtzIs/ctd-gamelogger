@@ -7,16 +7,12 @@ import NotFound from './pages/NotFound';
 import { Route, Routes, useLocation } from 'react-router';
 
 function App() {
-  const [gameList, setGameList] = useState([]);
+  const [gameList, setGameList] = useState(() => {
+    const savedGames = JSON.parse(localStorage.getItem('userGameList'));
+    return savedGames || [];
+  });
   const [title, setTitle] = useState('');
   const location = useLocation();
-
-  useEffect(() => {
-    const games = JSON.parse(localStorage.getItem('userGameList'));
-    if (games) {
-      setGameList(games);
-    }
-  }, []);
 
   useEffect(() => {
     if (location.pathname === '/') {
@@ -26,7 +22,7 @@ function App() {
     } else {
       setTitle('Not Found');
     }
-  });
+  }, [location]);
 
   function addGame(game) {
     const newGame = { id: Date.now(), favorite: false, ...game };

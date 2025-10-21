@@ -29,9 +29,8 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
     setIsEditing(false);
   }
 
-  function handleUpdate(event) {
+  function handleUpdate() {
     if (!isEditing) return;
-    event.preventDefault();
     onUpdateGame({
       ...game,
       title: workingTitle,
@@ -41,18 +40,15 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
     setIsEditing(false);
   }
 
-  function handleNextStatus(event) {
-    event.preventDefault();
+  function handleNextStatus() {
     onUpdateGame({ ...game, completionStatus: nextState });
   }
 
-  function handlePreviousStatus(event) {
-    event.preventDefault();
+  function handlePreviousStatus() {
     onUpdateGame({ ...game, completionStatus: 'Backlogged' });
   }
 
-  function handleFavorite(event) {
-    event.preventDefault();
+  function handleFavorite() {
     onFavoriteGame(game.id);
   }
 
@@ -108,24 +104,21 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
             <li>Status: {game.completionStatus}</li>
           </ul>
           <button
-            disabled={
-              game.completionStatus === 'Backlogged' ||
-              game.completionStatus === 'Completed'
-            }
-            onClick={(e) => handlePreviousStatus(e)}
+            disabled={game.completionStatus === 'Backlogged'}
+            onClick={() => handlePreviousStatus()}
           >
             Backlog
           </button>
           <button
             disabled={game.completionStatus === 'Completed'}
-            onClick={(e) => handleNextStatus(e)}
+            onClick={() => handleNextStatus()}
           >
             {game.completionStatus === 'Backlogged' ? 'Play' : 'Complete'}
           </button>
           {game.completionStatus === 'Completed' && (
             <button
               className={styles.favoriteButton}
-              onClick={(e) => handleFavorite(e)}
+              onClick={() => handleFavorite()}
             >
               {game.favorite ? 'Unfavorite' : 'Favorite'}
             </button>

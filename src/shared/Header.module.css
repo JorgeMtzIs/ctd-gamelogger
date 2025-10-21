@@ -14,7 +14,7 @@
 
 .navLinks {
   position: fixed;
-  top: 2%;
+  top: 20px;
   right: 5%;
   font-size: xx-large;
   display: flex;
