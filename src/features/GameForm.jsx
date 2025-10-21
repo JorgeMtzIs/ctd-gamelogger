@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import LabeledInput from '../shared/LabeledInput';
 import styles from './GameForm.module.css';
+import styled from 'styled-components';
 
-function GameForm({ children, onAddGame }) {
+function GameForm({ children, isSaving, onAddGame }) {
   const [isAdding, setIsAdding] = useState(false);
   const [gameData, setGameData] = useState({
     title: '',
@@ -10,6 +11,10 @@ function GameForm({ children, onAddGame }) {
     platform: '',
     completionStatus: '',
   });
+
+  const StyledButton = styled.button`
+    font-style: ${isSaving ? 'italic' : 'normal'};
+  `;
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -67,7 +72,7 @@ function GameForm({ children, onAddGame }) {
               {children}
             </select>
           </label>
-          <button
+          <StyledButton
             disabled={
               gameData.completionStatus.trim() === '' ||
               gameData.platform.trim() === '' ||
@@ -75,8 +80,8 @@ function GameForm({ children, onAddGame }) {
               gameData.year.trim() === ''
             }
           >
-            Submit
-          </button>
+            {isSaving ? 'Saving' : 'Submit'}
+          </StyledButton>
           <button onClick={handleCancelAdd}>Cancel</button>
         </form>
       ) : (

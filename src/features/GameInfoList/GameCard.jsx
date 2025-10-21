@@ -29,7 +29,8 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
     setIsEditing(false);
   }
 
-  function handleUpdate() {
+  function handleUpdate(event) {
+    event.preventDefault();
     if (!isEditing) return;
     onUpdateGame({
       ...game,
@@ -55,7 +56,7 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
   return (
     <div className={styles.gameCard}>
       {isEditing ? (
-        <>
+        <form onSubmit={(e) => handleUpdate(e)}>
           <ul className={styles.gameCardProperties}>
             <li>
               <LabeledInput
@@ -82,13 +83,11 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
               />
             </li>
           </ul>
-          <button className={styles.editButton} onClick={handleUpdate}>
-            Update
-          </button>
+          <button className={styles.editButton}>Update</button>
           <button className={styles.cancelButton} onClick={handleCancel}>
             Cancel
           </button>
-        </>
+        </form>
       ) : (
         <>
           <h2>{game.title}</h2>

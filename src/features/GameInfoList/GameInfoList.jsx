@@ -1,15 +1,23 @@
 import { useNavigate, useSearchParams } from 'react-router';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import GameCard from './GameCard';
 import styles from './GameInfoList.module.css';
 
-function GameInfoList({ gameList, onUpdateGame, onFavoriteGame }) {
+function GameInfoList({ gameList, isLoading, onUpdateGame, onFavoriteGame }) {
   const navigate = useNavigate();
+  const [filterFavorites, setFilterFavorites] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const filteredList = useCallback(() => {
+    if (filterFavorites) {
+      return gameList.filter((game) => game.favorite);
+    } else {
+      return gameList;
+    }
+  }, [filterFavorites, gameList]);
   const itemsPerPage = 9;
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const firstGameIndex = (currentPage - 1) * itemsPerPage;
-  const totalPages = Math.ceil(gameList.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredList().length / itemsPerPage);
 
   function handlePreviousPage() {
     if (!(currentPage - 1 < 1)) {
@@ -23,6 +31,10 @@ function GameInfoList({ gameList, onUpdateGame, onFavoriteGame }) {
     }
   }
 
+  function handleFilter() {
+    setFilterFavorites(!filterFavorites);
+  }
+
   useEffect(() => {
     if (
       typeof currentPage !== 'number' ||
@@ -33,12 +45,20 @@ function GameInfoList({ gameList, onUpdateGame, onFavoriteGame }) {
     }
   }, [currentPage, totalPages, navigate]);
 
-  return gameList.length === 0 ? (
-    <p>Press 'Add Game' above to get started</p>
+  return filteredList().length === 0 ? (
+    isLoading ? (
+      <p>Loading games</p>
+    ) : (
+      <p>Press 'Add Game' above to get started</p>
+    )
   ) : (
     <>
+      <label>
+        <input type="checkbox" onChange={handleFilter} />
+        Filter by Favorites
+      </label>
       <ul className={styles.gameInfoList}>
-        {gameList
+        {filteredList()
           .slice(firstGameIndex, firstGameIndex + itemsPerPage)
           .map((game) => (
             <GameCard
