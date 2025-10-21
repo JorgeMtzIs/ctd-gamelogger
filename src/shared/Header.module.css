@@ -1,0 +1,23 @@
+.active {
+  color: rgb(163, 154, 154);
+  margin-right: 2%;
+}
+
+.inactive {
+  color: black;
+  margin-right: 2%;
+}
+
+.title {
+  font-size: xx-large;
+}
+
+.navLinks {
+  position: fixed;
+  top: 2%;
+  right: 5%;
+  font-size: xx-large;
+  display: flex;
+  gap: 10%;
+  justify-content: flex-end;
+}

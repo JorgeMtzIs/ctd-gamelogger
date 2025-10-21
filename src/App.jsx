@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import styles from './App.module.css';
-import GameInfoList from './features/GameInfoList/GameInfoList';
-import GameForm from './features/GameForm';
+import Header from './shared/Header';
+import GamesPage from './pages/GamesPage';
+import About from './pages/About';
+import NotFound from './pages/NotFound';
+import { Route, Routes, useLocation } from 'react-router';
 
 function App() {
   const [gameList, setGameList] = useState([]);
-  const Status = Object.freeze({
-    BACKLOGGED: 'Backlogged',
-    PROGRESS: 'In Progress',
-    COMPLETED: 'Completed',
-  });
+  const [title, setTitle] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     const games = JSON.parse(localStorage.getItem('userGameList'));
@@ -17,6 +17,16 @@ function App() {
       setGameList(games);
     }
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setTitle('GameLogger');
+    } else if (location.pathname === '/about') {
+      setTitle('About');
+    } else {
+      setTitle('Not Found');
+    }
+  });
 
   function addGame(game) {
     const newGame = { id: Date.now(), favorite: false, ...game };
@@ -51,17 +61,22 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <h1>GameLogger</h1>
-      <GameForm onAddGame={addGame}>
-        <option value={Status.BACKLOGGED}>Backlogged</option>
-        <option value={Status.PROGRESS}>In Progress</option>
-        <option value={Status.COMPLETED}>Completed</option>
-      </GameForm>
-      <GameInfoList
-        gameList={gameList}
-        onUpdateGame={updateGame}
-        onFavoriteGame={favoriteGame}
-      />
+      <Header title={title} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <GamesPage
+              gameList={gameList}
+              onAddGame={addGame}
+              onUpdateGame={updateGame}
+              onFavoriteGame={favoriteGame}
+            />
+          }
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }
