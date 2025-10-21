@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import LabeledInput from '../../shared/LabeledInput';
+import SpacedButton from '../../shared/SpacedButton';
 import styles from './GameCard.module.css';
 
 function GameCard({ game, onUpdateGame, onFavoriteGame }) {
@@ -102,18 +103,16 @@ function GameCard({ game, onUpdateGame, onFavoriteGame }) {
             <li>Platform: {game.platform}</li>
             <li>Status: {game.completionStatus}</li>
           </ul>
-          <button
+          <SpacedButton
             disabled={game.completionStatus === 'Backlogged'}
             onClick={() => handlePreviousStatus()}
-          >
-            Backlog
-          </button>
-          <button
+            text={'Backlog'}
+          />
+          <SpacedButton
             disabled={game.completionStatus === 'Completed'}
             onClick={() => handleNextStatus()}
-          >
-            {game.completionStatus === 'Backlogged' ? 'Play' : 'Complete'}
-          </button>
+            text={game.completionStatus === 'Backlogged' ? 'Play' : 'Complete'}
+          />
           {game.completionStatus === 'Completed' && (
             <button
               className={styles.favoriteButton}

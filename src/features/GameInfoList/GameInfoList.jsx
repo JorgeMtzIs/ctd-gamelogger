@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from 'react-router';
 import { useCallback, useEffect, useState } from 'react';
 import GameCard from './GameCard';
+import SpacedButton from '../../shared/SpacedButton';
 import styles from './GameInfoList.module.css';
 
 function GameInfoList({ gameList, isLoading, onUpdateGame, onFavoriteGame }) {
@@ -70,21 +71,19 @@ function GameInfoList({ gameList, isLoading, onUpdateGame, onFavoriteGame }) {
           ))}
       </ul>
       <div>
-        <button
+        <SpacedButton
           disabled={currentPage === 1}
           onClick={() => handlePreviousPage()}
-        >
-          Previous
-        </button>
+          text={'Previous'}
+        />
         <span>
           Page {currentPage} of {totalPages}
         </span>
-        <button
+        <SpacedButton
           disabled={currentPage === totalPages}
           onClick={() => handleNextPage()}
-        >
-          Next
-        </button>
+          text={'Next'}
+        />
       </div>
     </>
   );
